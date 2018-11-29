@@ -15,24 +15,25 @@ namespace ProviderTests
 {
     public class TestStartup : Startup
     {
-        private Dictionary<string, Action<IApplicationBuilder>> providerStates;
+        private const int itemId = 5;
+        private readonly Dictionary<string, Action<IApplicationBuilder>> providerStates;
 
         public TestStartup()
         {
             providerStates = new Dictionary<string, Action<IApplicationBuilder>>
             {
                 {
-                    "There is an item with id 5",
+                    $"There is an item with id {itemId}",
                     (app) =>
                     {
                         using (var serviceScope = app.ApplicationServices.CreateScope())
                         {
                             var itemsContext = serviceScope.ServiceProvider.GetRequiredService<ItemsContext>();
-                            if (itemsContext.Items.SingleOrDefault(i => i.Id == 5) == null)
+                            if (itemsContext.Items.SingleOrDefault(i => i.Id == itemId) == null)
                             {
                                 itemsContext.Add(new Item
                                 {
-                                    Id = 5,
+                                    Id = itemId,
                                     Value = "Some Value"
                                 });
                                 itemsContext.SaveChanges();
