@@ -15,36 +15,41 @@ namespace Provider
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ItemsContext>(options =>
+            services.AddDbContext<DatabaseContext>(options =>
                 options.UseInMemoryDatabase("TestingDB"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var databaseContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                if (databaseContext.Passengers.SingleOrDefault(i => i.Id == 1) == null)
+                {
+                    databaseContext.Add(new Passenger
+                    {
+                        Id = 1,
+                        Name = "Marco",
+                        Surname = "Rossi"
+                    });
+                    databaseContext.SaveChanges();
+                }
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.Map("/api/providerValues", builder =>
+            app.Map("/api/passengers", builder =>
             {
                 builder.Run(async context =>
                 {
                     using (var serviceScope = app.ApplicationServices.CreateScope())
                     {
-                        var itemsContext = serviceScope.ServiceProvider.GetRequiredService<ItemsContext>();
-                        if (itemsContext.Items.SingleOrDefault(i => i.Id == 1) == null)
-                        {
-                            itemsContext.Add(new Item
-                            {
-                                Id = 1,
-                                Value = "Some Value"
-                            });
-                            itemsContext.SaveChanges();
-                        }
+                        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
                         var id = Convert.ToInt32(context.Request.Path.Value.Substring(context.Request.Path.Value.LastIndexOf('/') + 1));
                         context.Response.ContentType = "application/json; charset=utf-8";
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(itemsContext.Items.FirstOrDefault(i => i.Id == id)));
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(databaseContext.Passengers.FirstOrDefault(i => i.Id == id)));
                     }
                 });
             });

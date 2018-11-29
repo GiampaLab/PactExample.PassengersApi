@@ -2,15 +2,15 @@
 
 namespace Provider
 {
-    public class ItemsContext : DbContext
+    public class DatabaseContext : DbContext
     {
-        public ItemsContext()
+        public DatabaseContext()
         {}
 
-        public ItemsContext(DbContextOptions<ItemsContext> options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
         {}
 
-        public DbSet<Item> Items { get; set; }
+        public DbSet<Passenger> Passengers { get; set; }
     }
 }

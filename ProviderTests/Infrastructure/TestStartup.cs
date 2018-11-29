@@ -15,7 +15,7 @@ namespace ProviderTests
 {
     public class TestStartup : Startup
     {
-        private const int itemId = 5;
+        private const int passengerId = 5;
         private readonly Dictionary<string, Action<IApplicationBuilder>> providerStates;
 
         public TestStartup()
@@ -23,18 +23,19 @@ namespace ProviderTests
             providerStates = new Dictionary<string, Action<IApplicationBuilder>>
             {
                 {
-                    $"There is an item with id {itemId}",
+                    $"There is a passenger with id {passengerId}",
                     (app) =>
                     {
                         using (var serviceScope = app.ApplicationServices.CreateScope())
                         {
-                            var itemsContext = serviceScope.ServiceProvider.GetRequiredService<ItemsContext>();
-                            if (itemsContext.Items.SingleOrDefault(i => i.Id == itemId) == null)
+                            var itemsContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                            if (itemsContext.Passengers.SingleOrDefault(i => i.Id == passengerId) == null)
                             {
-                                itemsContext.Add(new Item
+                                itemsContext.Add(new Passenger
                                 {
-                                    Id = itemId,
-                                    Value = "Some Value"
+                                    Id = passengerId,
+                                    Name = "Mario",
+                                    Surname = "Rossi"
                                 });
                                 itemsContext.SaveChanges();
                             }
