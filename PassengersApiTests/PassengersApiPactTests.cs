@@ -6,19 +6,19 @@ using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ProviderTests
+namespace PassengersApiTests
 {
-    public class ProviderTests
+    public class PassengersApiPactTests
     {
         private readonly ITestOutputHelper output;
 
-        public ProviderTests(ITestOutputHelper output)
+        public PassengersApiPactTests(ITestOutputHelper output)
         {
             this.output = output;
         }
 
         [Fact]
-        public void EnsureProviderApiHonoursPactWithConsumer()
+        public void EnsurePassengersApiHonoursPactWithFlightsApi()
         {
             //Arrange
             var config = new PactVerifierConfig
@@ -41,9 +41,9 @@ namespace ProviderTests
             IPactVerifier pactVerifier = new PactVerifier(config);
             pactVerifier
                 .ProviderState($"{providerUrl}/provider-states")
-                .ServiceProvider("Provider", providerUrl)
-                .HonoursPactWith("Consumer")
-                .PactUri("..\\..\\..\\..\\..\\Consumer\\ConsumerTests\\pacts\\consumer-provider.json")
+                .ServiceProvider("PassengersApi", providerUrl)
+                .HonoursPactWith("FlightsApi")
+                .PactUri("..\\..\\..\\..\\..\\FlightsApi\\FlightsApiTests\\pacts\\flightsapi-passengersapi.json")
                 //.PactUri("http://pactbroker.optimum-development.nl/pacts/provider/Provider/consumer/Consumer/latest")
                 .Verify();
         }

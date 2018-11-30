@@ -1,4 +1,4 @@
-﻿namespace ProviderTests
+﻿namespace PassengersApiTests
 {
     public class ProviderState
     {

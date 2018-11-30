@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Provider
+namespace PassengersApi
 {
     public class DatabaseContext : DbContext
     {

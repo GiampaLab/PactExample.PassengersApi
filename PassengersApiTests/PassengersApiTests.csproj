@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Provider\Provider.csproj" />
+    <ProjectReference Include="..\PassengersApi\PassengersApi.csproj" />
   </ItemGroup>
 
 </Project>

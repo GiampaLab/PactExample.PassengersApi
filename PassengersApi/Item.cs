@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Provider
+namespace PassengersApi
 {
     public class Passenger
     {

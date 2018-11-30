@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Provider;
+using PassengersApi;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
-namespace ProviderTests
+namespace PassengersApiTests
 {
     public class TestStartup : Startup
     {
@@ -67,7 +67,7 @@ namespace ProviderTests
                     //A null or empty provider state key must be handled
                     if (providerState != null &&
                         !string.IsNullOrEmpty(providerState.State) &&
-                        providerState.Consumer == "Consumer")
+                        providerState.Consumer == "FlightsApi")
                     {
                         providerStates[providerState.State].Invoke(app);
                     }
