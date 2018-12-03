@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Provider;
+using PassengersApi;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,11 +11,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
-namespace ProviderTests
+namespace PassengersApiTests
 {
     public class TestStartup : Startup
     {
-        private const int itemId = 5;
+        private const int passengerId = 5;
         private readonly Dictionary<string, Action<IApplicationBuilder>> providerStates;
 
         public TestStartup()
@@ -23,18 +23,19 @@ namespace ProviderTests
             providerStates = new Dictionary<string, Action<IApplicationBuilder>>
             {
                 {
-                    $"There is an item with id {itemId}",
+                    $"There is a passenger with id {passengerId}",
                     (app) =>
                     {
                         using (var serviceScope = app.ApplicationServices.CreateScope())
                         {
-                            var itemsContext = serviceScope.ServiceProvider.GetRequiredService<ItemsContext>();
-                            if (itemsContext.Items.SingleOrDefault(i => i.Id == itemId) == null)
+                            var itemsContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                            if (itemsContext.Passengers.SingleOrDefault(i => i.Id == passengerId) == null)
                             {
-                                itemsContext.Add(new Item
+                                itemsContext.Add(new Passenger
                                 {
-                                    Id = itemId,
-                                    Value = "Some Value"
+                                    Id = passengerId,
+                                    Name = "Mario",
+                                    Surname = "Rossi"
                                 });
                                 itemsContext.SaveChanges();
                             }
@@ -66,7 +67,7 @@ namespace ProviderTests
                     //A null or empty provider state key must be handled
                     if (providerState != null &&
                         !string.IsNullOrEmpty(providerState.State) &&
-                        providerState.Consumer == "Consumer")
+                        providerState.Consumer == "FlightsApi")
                     {
                         providerStates[providerState.State].Invoke(app);
                     }
