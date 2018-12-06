@@ -43,8 +43,7 @@ namespace PassengersApiTests
                 .ProviderState($"{providerUrl}/provider-states")
                 .ServiceProvider("PassengersApi", providerUrl)
                 .HonoursPactWith("FlightsApi")
-                //.PactUri("..\\..\\..\\..\\..\\FlightsApi\\FlightsApiTests\\pacts\\flightsapi-passengersapi.json")
-                .PactUri("http://pactbroker.optimum-development.nl/pacts/provider/PassengersApi/consumer/FlightsApi/latest")
+                .PactUri("..\\..\\..\\..\\..\\PactExample.FlightsApi\\FlightsApiTests\\pacts\\flightsapi-passengersapi.json")
                 .Verify();
         }
     }
